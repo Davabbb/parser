@@ -24,7 +24,7 @@ def get_data(url):
         project_url = "https://www.avito.ru" + article.find("div", class_="iva-item-titleStep-2bjuh").find("a").get("href")
         projects_url.append(project_url)
 
-    for project_url in projects_url:
+    for project_url in projects_url[0:1]:
         print(project_url)
         req = requests.get(project_url, headers)
         name = project_url.split("/")[-2]
@@ -36,8 +36,19 @@ def get_data(url):
             src = file.read()
 
         soup = BeautifulSoup(src, "lxml")
-        info = soup.find("div", class_="l-content clearfix")
+        data = soup.find("div", class_="l-content clearfix")
+
+        d = data.find("div", class_="item-description-html").find_all("strong")
+        description = ''
+        for elem in d:
+            elem = elem.text
+            description += elem + '\n'
+        print(description)
+
+        address = data.find("span", class_="item-address__string").text.split(',')
+        district = address[0]
+        city = address[1]
+        address = address[-2] + address[-1]
 
 
 get_data("https://www.avito.ru/perm/zapchasti_i_aksessuary?cd=1")
-
