@@ -49,6 +49,9 @@ def get_data(url):
         district = address[0]
         city = address[1]
         address = address[-2] + address[-1]
+        print(district)
+        print(city)
+        print(address)
 
 
 get_data("https://www.avito.ru/perm/zapchasti_i_aksessuary?cd=1")
