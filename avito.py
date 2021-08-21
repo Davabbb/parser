@@ -66,4 +66,5 @@ all_models = ['opel+astra', 'volkswagen+golf', 'volkswagen+passat', 'bmw+e', 'pe
               'volvo+v70', 'volvo+v50']
 for place in all_places:
     for model in all_models:
+        time.sleep(5)
         get_data(f"https://www.avito.ru/{place}/zapchasti_i_aksessuary?q={model}", model)
