@@ -37,16 +37,15 @@ def get_data(url, model):
             src = file.read()
 
         soup = BeautifulSoup(src, "lxml")
-        data = soup.find("div", class_="l-content clearfix")
 
-        d = data.find("div", class_="item-description-html").find_all("strong")
+        d = soup.find("div", class_="item-description-text").find_all("strong")
         description = ''
         for elem in d:
             elem = elem.text
             description += elem + '\n'
         print(description)
 
-        address = data.find("span", class_="item-address__string").text.split(',')
+        address = soup.find("span", class_="item-address__string").text.split(',')
         district = address[0]
         city = address[1]
         address = address[-2] + address[-1]
