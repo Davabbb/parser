@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+import time
 
 
-def get_data(url):
+def get_data(url, model):
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36 OPR/77.0.4054.275 (Edition Yx GX)"
     }
@@ -52,6 +53,18 @@ def get_data(url):
         print(district)
         print(city)
         print(address)
+        code_word = model
+        print(code_word)
 
 
-get_data("https://www.avito.ru/perm/zapchasti_i_aksessuary?cd=1")
+all_places = ['samarskaya_oblast', 'saratovskaya_oblast', 'astrahan', 'volgogradskaya_oblast', 'ulyanovskaya_oblast',
+              'rostovskaya_oblast', 'voronezhskaya_oblast', 'belgorodskaya_oblast', 'kurskaya_oblast',
+              'lipetskaya_oblast', 'tambovskaya_oblast', 'orlovskaya_oblast', 'dagestan', 'krasnodarskiy_kray',
+              'ryazanskaya_oblast', 'respublika_krym', 'vladikavkaz', 'chechenskaya_respublika', 'bryanskaya_oblast',
+              'penzenskaya_oblast', 'tulskaya_oblast']
+all_models = ['opel+astra', 'volkswagen+golf', 'volkswagen+passat', 'bmw+e', 'peugeot', 'audi+a4', 'audi+a6',
+              'mazda+3', 'mazda+6', 'mitsubishi+outlander', 'renault+megane', 'hyndai+i30', 'kia', 'nissan',
+              'volvo+v70', 'volvo+v50']
+for place in all_places:
+    for model in all_models:
+        get_data(f"https://www.avito.ru/{place}/zapchasti_i_aksessuary?q={model}", model)
