@@ -1,11 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+import random
 
 
 def get_data(url, model):
     headers = {
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36 OPR/77.0.4054.275 (Edition Yx GX)"
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 OPR/78.0.4093.153 (Edition Yx GX)"
     }
 
     # req = requests.get(url, headers)
@@ -26,6 +27,7 @@ def get_data(url, model):
         projects_url.append(project_url)
 
     for project_url in projects_url[0:1]:
+        time.sleep(random.randint(4, 6))
         print(project_url)
         req = requests.get(project_url, headers)
         name = project_url.split("/")[-2]
@@ -38,7 +40,7 @@ def get_data(url, model):
 
         soup = BeautifulSoup(src, "lxml")
 
-        d = soup.find("div", class_="item-description-text").find_all("strong")
+        d = soup.find("div", class_="item-description-html").find_all("p")
         description = ''
         for elem in d:
             elem = elem.text
@@ -55,6 +57,12 @@ def get_data(url, model):
         code_word = model
         print(code_word)
 
+        view = soup.find("li", class_="item-params-list-item")
+        print(view)
+
+        company = soup.find("a", class_="link-link-39EVK link-design-default-2sPEv").text
+        print(company)
+
 
 all_places = ['samarskaya_oblast', 'saratovskaya_oblast', 'astrahan', 'volgogradskaya_oblast', 'ulyanovskaya_oblast',
               'rostovskaya_oblast', 'voronezhskaya_oblast', 'belgorodskaya_oblast', 'kurskaya_oblast',
@@ -64,7 +72,7 @@ all_places = ['samarskaya_oblast', 'saratovskaya_oblast', 'astrahan', 'volgograd
 all_models = ['opel+astra', 'volkswagen+golf', 'volkswagen+passat', 'bmw+e', 'peugeot', 'audi+a4', 'audi+a6',
               'mazda+3', 'mazda+6', 'mitsubishi+outlander', 'renault+megane', 'hyndai+i30', 'kia', 'nissan',
               'volvo+v70', 'volvo+v50']
-for place in all_places:
-    for model in all_models:
-        time.sleep(5)
+for place in all_places[0:1]:
+    for model in all_models[0:1]:
         get_data(f"https://www.avito.ru/{place}/zapchasti_i_aksessuary?q={model}", model)
+        time.sleep(5)
