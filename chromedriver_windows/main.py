@@ -13,12 +13,13 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 
 class Client:
     url = 'https://www.avito.ru/{}/zapchasti_i_aksessuary?q={}&p={}'
-    keys = ['opel+astra', 'volkswagen+golf', 'volkswagen+passat', 'bmw+e', 'peugeot', 'audi+a4', 'audi+a6', 'mazda+3',
+    keys = [#'opel+astra', 'volkswagen+golf', 'volkswagen+passat',
+            'bmw+e', 'peugeot', 'audi+a4', 'audi+a6', 'mazda+3',
             'mazda+6', 'mitsubishi+outlander', 'renault+megane', 'hyndai+i30', 'kia', 'nissan', 'volvo+v70',
             'volvo+v50']
     data = {'opel+astra': ["опель", "астра"],
-            'volkswagen+golf': ["фольксваген", "гольф"],
-            'volkswagen+passat': ["фольсваген", "пассат"],
+            'volkswagen+golf': ["гольф"],
+            'volkswagen+passat': ["пассат"],
             'bmw+e': ["бмв"],
             'peugeot': ["пежо"],
             'audi+a4': ["ауди"],
@@ -69,7 +70,7 @@ class Client:
                         while should_be_filtered and count_url != 49:
                             self.driver.get(urls[count_url])
                             print(page, count_url + 1, key, region, urls[count_url])
-                            info, address, url_user, district, vid_zapchasti, name, phone = self.parse_element()
+                            info, address, url_user, district, vid_zapchasti, name, phone, contact = self.parse_element()
                             k = key.split('+')
                             for elem in k:
                                 if elem not in info.lower() and elem not in name.lower():
@@ -78,7 +79,7 @@ class Client:
                                 if elem in info.lower() or elem in name.lower():
                                     should_be_filtered = True
                             self.result.append(
-                                [all_ad, phone, url_user, key.replace('+', ' '), address, district, vid_zapchasti, info,
+                                [contact, phone, url_user, key.replace('+', ' '), address, district, vid_zapchasti, info,
                                  urls[count_url]])
                             count_url += 1
                         page += 1
@@ -106,6 +107,8 @@ class Client:
         name = self.driver.find_elements_by_class_name('title-info-title-text')
         name = name[0].text if name else ''
 
+        time.sleep(random.randint(1, 3))
+
         button = self.driver.find_elements_by_xpath('//button[@class="styles-item-phone-button_height-3SOiy button-button-2Fo5k button-size-l-3LVJf button-success-1Tf-u width-width-12-2VZLz"]')
         if button:
             button[0].click()
@@ -118,7 +121,11 @@ class Client:
         else:
             phone = ''
 
-        return info, address, url_user, district, vid_zapchasti, name, phone
+        #contact = self.driver.find_elements_by_class_name('seller-info-col')
+        #contact = contact[1].text if contact else ''
+        contact = ''
+
+        return info, address, url_user, district, vid_zapchasti, name, phone, contact
 
     def crop_(self, location, size):
         image = Image.open("avito_screenshot.png")
